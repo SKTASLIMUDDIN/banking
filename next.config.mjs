@@ -9,6 +9,12 @@ const nextConfig = {
     ignoreDuringBuilds: true
   }
 };
+const isLinux = process.platform === "linux";
+
+module.exports = {
+  swcMinify: !isLinux,  // Disable SWC minification on Linux
+};
+
 
 export default withSentryConfig(withSentryConfig(nextConfig, {
 // For all available options, see:
