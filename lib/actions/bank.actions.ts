@@ -12,7 +12,7 @@ import {
 import { plaidClient } from "../plaid";
 import { parseStringify } from "../utils";
 
-//import { getTransactionsByBankId } from "./transaction.actions";
+import { getTransactionsByBankId } from "./transaction.actions";
 import { getBanks, getBank } from "./user.actions";
 
 // Get multiple bank accounts
@@ -75,7 +75,7 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
     });
     const accountData = accountsResponse.data.accounts[0];
 
-    {/*// get transfer transactions from appwrite
+     // get transfer transactions from appwrite
     const transferTransactionsData = await getTransactionsByBankId({
      bankId: bank.$id,
    });
@@ -90,7 +90,7 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
         category: transferData.category,
         type: transferData.senderBankId === bank.$id ? "debit" : "credit",
       })
-    );*/}
+    );
 
     // get institution info from plaid
     const institution = await getInstitution({
@@ -114,9 +114,9 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
       appwriteItemId: bank.$id,
     };
 
+
     // sort transactions by date such that the most recent transaction is first
-    const allTransactions = [...transactions].sort(
-      //const allTransactions = [...transactions, ...transferTransactions].sort(
+    const allTransactions = [...transactions, ...transferTransactions].sort(
      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
@@ -147,7 +147,7 @@ export const getInstitution = async ({
   }
 };
 
-// Get transactions
+/*// Get transactions
 export const getTransactions = async ({
   accessToken,
 }: getTransactionsProps) => {
@@ -182,5 +182,48 @@ export const getTransactions = async ({
     return parseStringify(transactions);
   } catch (error) {
     console.error("An error occurred while getting the accounts:", error);
+  }
+};*/
+
+
+export const getTransactions = async ({
+  accessToken,
+}: getTransactionsProps) => {
+  let hasMore = true;
+  let transactions: any[] = []; // Initialize as an empty array
+
+  try {
+    // Iterate through each page of new transaction updates for item
+    while (hasMore) {
+      const response = await plaidClient.transactionsSync({
+        access_token: accessToken,
+      });
+
+      const data = response.data;
+
+      // Ensure `added` is an array before mapping
+      const newTransactions = data.added?.map((transaction) => ({
+        id: transaction.transaction_id,
+        name: transaction.name,
+        paymentChannel: transaction.payment_channel,
+        type: transaction.payment_channel,
+        accountId: transaction.account_id,
+        amount: transaction.amount,
+        pending: transaction.pending,
+        category: transaction.category ? transaction.category[0] : "",
+        date: transaction.date,
+        image: transaction.logo_url,
+      })) || [];
+
+      // Append new transactions to the existing array
+      transactions = [...transactions, ...newTransactions];
+
+      hasMore = data.has_more;
+    }
+
+    return parseStringify(transactions);
+  } catch (error) {
+    console.error("An error occurred while getting the transactions:", error);
+    return []; // Return an empty array or appropriate fallback
   }
 };

@@ -1,5 +1,6 @@
 import HeaderBox from '@/components/HeaderBox'
-import RecentTransactoins from '@/components/RecentTransactoins'
+import RecentTransactions from '@/components/RecentTransactoins'
+
 import RightSidebar from '@/components/RightSidebar'
 import TotalBalanceBox from '@/components/TotalBalanceBox'
 import { getAccount, getAccounts } from '@/lib/actions/bank.actions'
@@ -43,18 +44,18 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
          />
         </header>
 
-        <RecentTransactoins
-        accounts={accountsData}
-        transactions={account?.transactions}
-        appwriteItemId={appwriteItemId}
-        page={currentPage}
+        <RecentTransactions
+          accounts={accountsData}
+          transactions={account?.transactions}
+          appwriteItemId={appwriteItemId}
+          page={currentPage}
         
         />
 
       </div>
       <RightSidebar
       user={loggedIn}
-      transactions={accounts?.transactions}
+      transactions={account?.transactions}
       banks={accountsData?.slice(0, 2)}
       />
     </section>
