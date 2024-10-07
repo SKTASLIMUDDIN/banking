@@ -1,32 +1,40 @@
 import {withSentryConfig} from '@sentry/nextjs';
 /** @type {import('next').NextConfig} */
-
+import os from 'node:os';
 const nextConfig = {
   typescript: {
     ignoreBuildErrors: true
   },
   eslint: {
     ignoreDuringBuilds: true
-  }
-};
-/*
-const os = require('os');
-const isWindows = os.platform() === 'win32';
-
-module.exports = {
-  swcMinify: isWindows, // Enable SWC only on Windows platforms
-  experimental: {
-    forceSwcTransforms: isWindows, // Disable SWC transforms on non-Windows
   },
+  swcMinify: os.platform() === 'win32', // Enable SWC only on Windows platforms
+  experimental: {
+    forceSwcTransforms: os.platform() === 'win32', // Disable SWC transforms on non-Windows
+  }
 };
 
 const isLinux = process.platform === "linux";
+if (isLinux) {
+  nextConfig.swcMinify = false;  // Disable SWC minification on Linux
+}
+//const os = require('os');
+//const isWindows = os.platform() === 'win32';
 
-module.exports = {
-  swcMinify: !isLinux,  // Disable SWC minification on Linux
-};
+//module.exports = {
+//  swcMinify: isWindows, // Enable SWC only on Windows platforms
+ // experimental: {
+ //   forceSwcTransforms: isWindows, // Disable SWC transforms on non-Windows
+ // },
+//};
 
-*/
+//const isLinux = process.platform === "linux";
+
+//module.exports = {
+ // swcMinify: !isLinux,  // Disable SWC minification on Linux
+//};
+
+
 export default withSentryConfig(withSentryConfig(nextConfig, {
 // For all available options, see:
 // https://github.com/getsentry/sentry-webpack-plugin#options
