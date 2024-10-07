@@ -9,6 +9,7 @@ const nextConfig = {
     ignoreDuringBuilds: true
   }
 };
+/*
 const os = require('os');
 const isWindows = os.platform() === 'win32';
 
@@ -25,7 +26,7 @@ module.exports = {
   swcMinify: !isLinux,  // Disable SWC minification on Linux
 };
 
-
+*/
 export default withSentryConfig(withSentryConfig(nextConfig, {
 // For all available options, see:
 // https://github.com/getsentry/sentry-webpack-plugin#options
