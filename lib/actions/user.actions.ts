@@ -28,7 +28,8 @@ export const getUserInfo = async ({ userId }: getUserInfoProps) => {
 
     return parseStringify(user.documents[0]);
   } catch (error) {
-    console.log(error)
+    console.log("An error occurred while getUserInfo", error);
+
   }
 }
 
@@ -114,7 +115,8 @@ export async function getLoggedInUser() {
 
     return parseStringify(user);
   } catch (error) {
-    console.log(error)
+    console.log("An error occurred while getLoggedInUser", error);
+
     return null;
   }
 }
@@ -138,7 +140,7 @@ export const createLinkToken = async (user: User) => {
         client_user_id: user.$id
       },
       client_name: `${user.firstName} ${user.lastName}`,
-      products: ['auth'] as Products[],
+      products: ['auth', 'transactions'] as Products[],
       language: 'en',
       country_codes: ['US'] as CountryCode[],
     }
@@ -147,7 +149,8 @@ export const createLinkToken = async (user: User) => {
 
     return parseStringify({ linkToken: response.data.link_token })
   } catch (error) {
-    console.log(error);
+    console.log("An error occurred while creating link token", error);
+
   }
 }
 
@@ -178,7 +181,8 @@ export const createBankAccount = async ({
 
     return parseStringify(bankAccount);
   } catch (error) {
-    console.log(error);
+    console.log("An error occurred while create bankAccount", error);
+
   }
 }
 
@@ -240,7 +244,7 @@ export const exchangePublicToken = async ({
       publicTokenExchange: "complete",
     });
   } catch (error) {
-    console.error("An error occurred while creating exchanging token:", error);
+    console.log("An error occurred while creating exchanging token:", error);
   }
 }
 
@@ -256,7 +260,7 @@ export const getBanks = async ({ userId }: getBanksProps) => {
 
     return parseStringify(banks.documents);
   } catch (error) {
-    console.log(error)
+    console.log("An error occurred while getBank userId:", error);
   }
 }
 
@@ -272,7 +276,8 @@ export const getBank = async ({ documentId }: getBankProps) => {
 
     return parseStringify(bank.documents[0]);
   } catch (error) {
-    console.log(error)
+    console.log("An error occurred while getBank documentId", error);
+    
   }
 }
 
@@ -290,6 +295,6 @@ export const getBankByAccountId = async ({ accountId }: getBankByAccountIdProps)
 
     return parseStringify(bank.documents[0]);
   } catch (error) {
-    console.log(error)
+    console.log("An error occurred while getBankByAccountId:", error);
   }
 }
