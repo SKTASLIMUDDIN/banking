@@ -9,6 +9,16 @@ const nextConfig = {
     ignoreDuringBuilds: true
   }
 };
+const os = require('os');
+const isWindows = os.platform() === 'win32';
+
+module.exports = {
+  swcMinify: isWindows, // Enable SWC only on Windows platforms
+  experimental: {
+    forceSwcTransforms: isWindows, // Disable SWC transforms on non-Windows
+  },
+};
+
 const isLinux = process.platform === "linux";
 
 module.exports = {
