@@ -1,6 +1,7 @@
 import {withSentryConfig} from '@sentry/nextjs';
 /** @type {import('next').NextConfig} */
-import os from 'node:os';
+import os from 'os';
+
 const nextConfig = {
   typescript: {
     ignoreBuildErrors: true
@@ -18,7 +19,7 @@ const isLinux = process.platform === "linux";
 if (isLinux) {
   nextConfig.swcMinify = false;  // Disable SWC minification on Linux
 }
-//const os = require('os');
+
 //const isWindows = os.platform() === 'win32';
 
 //module.exports = {
